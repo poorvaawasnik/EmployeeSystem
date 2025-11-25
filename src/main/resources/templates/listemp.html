@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>
+    List Employee
+</h1>
+<a th:href="@{/listempbyjob}"><button>Order By Job</button></a>
+<a th:href="@{/listemp}"><button>Order By Id</button></a>
+<a th:href="@{/listempbyname}"><button>Order By Name</button></a>
+<hr>
+<table border="1">
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Gender</th>
+        <th>Job</th>
+        <th>Joindate</th>
+        <th>Salary</th>
+    </tr>
+
+<tr th:each="emp : ${emplist}">
+    <td th:text="${emp.id}"></td>
+    <td th:text="${emp.name}"></td>
+    <td th:text="${emp.gender}"></td>
+    <td th:text="${emp.job}"></td>
+    <td th:text="${emp.joindate}"></td>
+    <td th:text="${emp.salary}"></td>
+
+</tr>
+</table>
+</body>
+</html>
