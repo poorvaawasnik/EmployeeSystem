@@ -21,5 +21,10 @@ public interface EmployeeRepository extends JpaRepository<EmployeeEntity, Intege
 
     @Query("SELECT e FROM EmployeeEntity e ORDER BY e.job")
     List<EmployeeEntity> getEmployeeByJob();
+
+
+    @Query("SELECT e FROM EmployeeEntity e WHERE e.name like  ?1%  ")
+    List<EmployeeEntity> searchEmployeeByName(String name);
+
 }
 

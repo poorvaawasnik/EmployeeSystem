@@ -25,4 +25,8 @@ public class EmployeeService {
     public  List<EmployeeEntity> getEmployeeByJob(){
         return employeeRepository.getEmployeeByJob();
     }
+    public List<EmployeeEntity> searchEmployeeByName(String name)
+    {
+        return employeeRepository.searchEmployeeByName(name);
+    }
 }

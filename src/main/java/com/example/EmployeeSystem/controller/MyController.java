@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
@@ -51,6 +52,18 @@ public class MyController {
     public String listempbyjob(Model model){
         List<EmployeeEntity> emplist=employeeService.getEmployeeByJob();
         model.addAttribute("emplist",emplist);
+        return "listemp";
+    }
+    @RequestMapping("listempsearchsubmit")
+            public String listempsearchsubmit(@RequestParam("search") String name , Model model)
+    {
+        List<EmployeeEntity> emplist=employeeService.searchEmployeeByName(name);
+        if(emplist.size() > 0)
+        {
+            model.addAttribute("emplist",emplist);
+        }else {
+            model.addAttribute("emplist",null);
+        }
         return "listemp";
     }
 }
