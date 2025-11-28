@@ -1,7 +1,10 @@
 package com.example.EmployeeSystem.controller;
 
+import com.example.EmployeeSystem.entity.AddressEntity;
 import com.example.EmployeeSystem.entity.EmployeeEntity;
+import com.example.EmployeeSystem.entity.UserEntity;
 import com.example.EmployeeSystem.service.EmployeeService;
+import com.example.EmployeeSystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +19,8 @@ import java.util.List;
 public class MyController {
     @Autowired
     EmployeeService employeeService;
+    @Autowired
+    UserService userService;
 
     @RequestMapping("")
     public String index()
@@ -66,4 +71,33 @@ public class MyController {
         }
         return "listemp";
     }
+
+    @RequestMapping("useraddresssave")
+    @ResponseBody
+    public String useraddresssave(){
+        AddressEntity addressEntity=new AddressEntity("Rajapeth","Amaravti",444601);
+        UserEntity userEntity=new UserEntity("Amit Jain",addressEntity);
+        AddressEntity addressEntity1=new AddressEntity("gadge nagar","Amravati",444601);
+        UserEntity userEntity1=new UserEntity("Puja patil",addressEntity1);
+        userService.saveUser(userEntity);
+        userService.saveUser(userEntity1);
+        return "User Address Save";
+
+    }
+    @RequestMapping("useraddressget")
+    @ResponseBody
+    public String useraddressget(@RequestParam("id") int id){
+        UserEntity userEntity = userService.getUserById(id);
+
+        if (userEntity == null) {
+            return "User not found with id " + id;
+        }
+
+        AddressEntity address = userEntity.getAddress();
+
+        return "Name: " + userEntity.getName() +
+                " Address: " + address.getArea() + ", " +
+                address.getCity() + " - " + address.getPincode();
+    }
+
 }
