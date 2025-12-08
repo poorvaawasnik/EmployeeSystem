@@ -1,9 +1,9 @@
 package com.example.EmployeeSystem.controller;
 
-import com.example.EmployeeSystem.entity.AddressEntity;
-import com.example.EmployeeSystem.entity.EmployeeEntity;
-import com.example.EmployeeSystem.entity.UserEntity;
+import com.example.EmployeeSystem.entity.*;
+import com.example.EmployeeSystem.service.CourseService;
 import com.example.EmployeeSystem.service.EmployeeService;
+import com.example.EmployeeSystem.service.StudentService;
 import com.example.EmployeeSystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +21,10 @@ public class MyController {
     EmployeeService employeeService;
     @Autowired
     UserService userService;
+    @Autowired
+    StudentService studentService;
+    @Autowired
+    CourseService courseService;
 
     @RequestMapping("")
     public String index()
@@ -34,6 +38,7 @@ public class MyController {
         model.addAttribute("entity",entity);
         return "createempform";
     }
+    //----------------------------------------------------------------------------------------------------------------
     @RequestMapping("createempsubmit")
     @ResponseBody
     public String createempsubmit( @ModelAttribute("entity") EmployeeEntity entity)
@@ -41,24 +46,28 @@ public class MyController {
         employeeService.saveEmployee(entity);
         return "createempsubmit";
     }
+    //------------------------------------------------------------------------------------------------------------
     @RequestMapping("listemp")
     public String listemp(Model model){
         List<EmployeeEntity> emplist=employeeService.getAllEmployee();
         model.addAttribute("emplist",emplist);
         return "listemp";
     }
+    //-----------------------------------------------------------------------------------------------------------
     @RequestMapping("listempbyname")
     public String listempbyname(Model model){
         List<EmployeeEntity> emplist=employeeService.getEmployeeByName();
         model.addAttribute("emplist",emplist);
         return "listemp";
     }
+    //-------------------------------------------------------------------------------------------------------------
     @RequestMapping("listempbyjob")
     public String listempbyjob(Model model){
         List<EmployeeEntity> emplist=employeeService.getEmployeeByJob();
         model.addAttribute("emplist",emplist);
         return "listemp";
     }
+    //------------------------------------------------------------------------------------------------------------
     @RequestMapping("listempsearchsubmit")
             public String listempsearchsubmit(@RequestParam("search") String name , Model model)
     {
@@ -71,7 +80,7 @@ public class MyController {
         }
         return "listemp";
     }
-
+     //----------------------------------------------------------------------------------------------------------------
     @RequestMapping("useraddresssave")
     @ResponseBody
     public String useraddresssave(){
@@ -84,6 +93,7 @@ public class MyController {
         return "User Address Save";
 
     }
+    //-----------------------------------------------------------------------------------------------------------------
     @RequestMapping("useraddressget")
     @ResponseBody
     public String useraddressget(@RequestParam("id") int id){
@@ -99,5 +109,70 @@ public class MyController {
                 " Address: " + address.getArea() + ", " +
                 address.getCity() + " - " + address.getPincode();
     }
+    //--------------------------------------------------------------------------------------------------------
 
-}
+    @RequestMapping("studentcoursesave")
+    @ResponseBody
+    public String studentcoursesave() {
+        CourseEntity c1 = new CourseEntity("C", "2500");
+        CourseEntity c2 = new CourseEntity("Python", "3000");
+        StudentEntity studentEntity = new StudentEntity("Amit Jain", "CS", "Amravati");
+        c1.setStudentEntity(studentEntity);
+        c2.setStudentEntity(studentEntity);
+        List<CourseEntity> clist = List.of(c1);
+        studentEntity.setCourseList(clist);
+        studentService.saveStudent(studentEntity);
+        return "studentcoursesave";
+    }
+    //--------------------------------------------------------------------------------------------------------
+        @RequestMapping("studentcourseget")
+        @ResponseBody
+        public String studentcourseget () {
+
+            StudentEntity studentEntity = studentService.getStudentById(1);
+
+            if (studentEntity == null) {
+                return "Student with ID 1 not found";
+            }
+
+            System.out.println(studentEntity.getName());
+            System.out.println(studentEntity.getCity());
+
+            List<CourseEntity> clist = studentEntity.getCourseList();
+
+            if (clist == null || clist.isEmpty()) {
+                return "Student found but no courses assigned";
+            }
+
+            for (CourseEntity courseEntity : clist) {
+                System.out.println("Course: " + courseEntity.getName() +
+                        " Fees: " + courseEntity.getFees());
+            }
+
+            return "studentcourseget";
+        }
+       // ---------------------------------------------------------------------------------------------------
+       /* @RequestMapping("studentcoursedelete")
+        @ResponseBody
+        public String studentcoursedelete()
+        {
+         studentService.studentDelete(1);
+        return "studentcoursedelete";
+        }
+      */
+        //-------------------------------------------------------------------------------------------------------
+
+    @RequestMapping("/studentcourses")
+    @ResponseBody
+    public String studentcoursesavesubmit(){
+        StudentEntity student1 = new StudentEntity("Amit Jain","CS","Amravati");
+        CourseEntity course1 = new CourseEntity("C","2500");
+        CourseEntity course2 = new CourseEntity("Python","3500");
+        courseService.saveCourse(course1);
+        courseService.saveCourse(course2);
+        List<CourseEntity> clist = List.of(course1, course2);
+        student1.setCourseList(clist);
+        studentService.saveStudent(student1);
+        return  "studentcourse";
+    }
+    }

@@ -1,11 +1,18 @@
 package com.example.EmployeeSystem.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
 @Entity
 @Table(name="student")
+@NoArgsConstructor
 public class StudentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -13,58 +20,19 @@ public class StudentEntity {
     private String name;
     private String branch;
     private String city;
-    @OneToMany( cascade = CascadeType.ALL)
-    private List<CourseEntity> coursesList;
 
-    public StudentEntity(String name, String branch, String city, List<CourseEntity> coursesList) {
+    @ManyToMany
+    @JoinTable(name = "student_courses_table", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
+
+    private List<CourseEntity> courseList;
+
+    public StudentEntity(String name, String branch, String city) {
         this.name = name;
         this.branch = branch;
         this.city = city;
-        this.coursesList = coursesList;
+       
     }
 
-    public StudentEntity() {
-    }
-
-    public int getId() {
-        return Id;
-    }
-
-    public void setId(int id) {
-        Id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getBranch() {
-        return branch;
-    }
-
-    public void setBranch(String branch) {
-        this.branch = branch;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public List<CourseEntity> getCoursesList() {
-        return coursesList;
-    }
-
-    public void setCoursesList(List<CourseEntity> coursesList) {
-        this.coursesList = coursesList;
-    }
 
     @Override
     public String toString() {
@@ -73,8 +41,11 @@ public class StudentEntity {
                 ", name='" + name + '\'' +
                 ", branch='" + branch + '\'' +
                 ", city='" + city + '\'' +
-                ", coursesList=" + coursesList +
+                
                 '}';
     }
+
+
+
 }
 

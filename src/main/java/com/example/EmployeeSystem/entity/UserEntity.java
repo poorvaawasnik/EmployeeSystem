@@ -2,6 +2,8 @@ package com.example.EmployeeSystem.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name="user")
 public class UserEntity {
@@ -13,6 +15,7 @@ public class UserEntity {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="address_id",referencedColumnName = "id")
     private AddressEntity address;
+
 
 
 
